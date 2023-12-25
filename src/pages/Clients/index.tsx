@@ -3,16 +3,10 @@ import useAxios from "../../hooks/useAxios";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-
-type DataRow = {
-	firstName: string;
-	email: string;
-	phone: string;
-	address: { city: string };
-};
+import { ClientsRow } from "../../types/types";
 
 function Clients() {
-	const [clients, setClients] = useState<any>(false);
+	const [clients, setClients] = useState<ClientsRow[] | undefined>(undefined);
 	const theme = useSelector((state: RootState) => state.theme.value);
 	const customStyles = {
 		headRow: {
@@ -23,14 +17,14 @@ function Clients() {
 		},
 		rows: {
 			style: {
-				color: theme.PRIMARY_TEXT_COLOR,
-				backgroundColor: theme.PRIMARY_BG_COLOR,
+				color: theme.primary_text_color,
+				backgroundColor: theme.primary_bg_color,
 				minHeight: "36px",
 			},
 		},
 	};
 
-	const columns: TableColumn<DataRow>[] = [
+	const columns: TableColumn<ClientsRow>[] = [
 		{
 			name: "Title",
 			selector: (row) => row.firstName,
@@ -41,13 +35,19 @@ function Clients() {
 			selector: (row) => row.email,
 		},
 		{
-			name: "phone",
+			name: "Phone",
 			selector: (row) => row.phone,
 		},
 		{
 			name: "City",
 			selector: (row) => row.address.city,
 			sortable: true,
+		},
+		{
+			name: "Actions",
+			cell: (row) => (
+				<button onClick={() => deleteHandler(row.id)}>Delete</button>
+			),
 		},
 	];
 
@@ -57,11 +57,31 @@ function Clients() {
 		baseURL: URL,
 	});
 
-	useEffect(() => {
+	const deleteHandler = (id: number) => {
+		//dummy delete for API
+		const deleteClient = fetch(`https://dummyjson.com/users/${id}`, {
+			method: "DELETE",
+		}).then((res) => res.json());
+		// after delete on backend we needed something like
+		// loadClients();
+
+		setClients(
+			clients?.filter((user: ClientsRow) =>
+				user ? user.id != id : false
+			)
+		);
+	};
+
+	const loadClients = () => {
 		sendData();
 		if (response) {
 			setClients(response.data.users);
+			console.log("Test reload useEffect function...");
 		}
+	};
+
+	useEffect(() => {
+		loadClients();
 	}, [loading]);
 
 	return (
