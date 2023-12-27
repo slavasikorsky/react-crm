@@ -12,6 +12,6 @@ export type ClientsRow = {
 	firstName: string;
 	email: string;
 	phone: string;
-	address: { city: string };
+	address?: { city: string };
 	isDeleted?: boolean;
 };

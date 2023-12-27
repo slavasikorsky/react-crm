@@ -8,10 +8,14 @@ import Loader from "../../components/Loader";
 import Button from "../../components/UI/Button";
 import Popup from "../../components/Popup";
 import { useTranslation } from "react-i18next";
+import Form from "../../components/Form";
 
 function Clients() {
 	const { t } = useTranslation();
 	const [clients, setClients] = useState<ClientsRow[] | undefined>(undefined);
+	const [editClients, setEditClients] = useState<ClientsRow | undefined>(
+		undefined
+	);
 	const [openPopup, setOpenPopup] = useState<boolean>(false);
 	const theme = useSelector((state: RootState) => state.theme.value);
 	const customStyles = {
@@ -78,13 +82,37 @@ function Clients() {
 
 		setClients(
 			clients?.filter((user: ClientsRow) =>
-				user ? user.id != id : false
+				user ? user.id !== id : false
 			)
 		);
 	};
 
 	const editHandler = (id: number) => {
+		const editContent = clients?.filter((client) => client.id === id);
+		if (editContent) {
+			setEditClients(editContent[0]);
+		}
 		setOpenPopup(!openPopup);
+	};
+
+	const updateHandler = async (data: ClientsRow) => {
+		// dummy update for API
+		// updating title of post with id
+		fetch(`https://dummyjson.com/posts/${data.id}`, {
+			// PUT or PATCH
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				...data,
+			}),
+		}).then((res) => res.json());
+		// after update on backend we needed something like
+		// loadClients();
+
+		const updatedClients = clients?.map((client) =>
+			client.id == data.id ? (client = data) : client
+		);
+		setClients(updatedClients);
 	};
 
 	const loadClients = () => {
@@ -113,12 +141,7 @@ function Clients() {
 				<Loader />
 			)}
 			<Popup trigger={openPopup} setTrigger={setOpenPopup}>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit.
-					Culpa vitae ducimus assumenda similique tempore aspernatur
-					aut iure dignissimos modi, sunt id nobis architecto optio.
-					Eos excepturi porro adipisci reprehenderit quas?
-				</p>
+				<Form values={editClients} onSubmit={updateHandler} />
 			</Popup>
 		</>
 	);
