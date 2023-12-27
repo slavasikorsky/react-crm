@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { darkTheme, lightTheme } from "../../data/theme";
 import { RootState } from "../../store/store";
 import { changeTheme } from "../../store/themeSlice";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export default function Header() {
 	const theme = useSelector((state: RootState) => state.theme.value.mode);
@@ -17,6 +18,7 @@ export default function Header() {
 				<option value={darkTheme.mode}>{darkTheme.mode}</option>
 				<option value={lightTheme.mode}>{lightTheme.mode}</option>
 			</select>
+			<LanguageSwitcher />
 		</>
 	);
 }
