@@ -13,4 +13,5 @@ export const lightTheme = {
 	secondary_bg_color: "#B8FACE",
 	primary_text_color: "#3b3b3b",
 	secondary_text_color: "#123123",
+	active_color: "#F97068",
 };

@@ -4,9 +4,15 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { ClientsRow } from "../../types/types";
+import Loader from "../../components/Loader";
+import Button from "../../components/UI/Button";
+import Popup from "../../components/Popup";
+import { useTranslation } from "react-i18next";
 
 function Clients() {
+	const { t } = useTranslation();
 	const [clients, setClients] = useState<ClientsRow[] | undefined>(undefined);
+	const [openPopup, setOpenPopup] = useState<boolean>(false);
 	const theme = useSelector((state: RootState) => state.theme.value);
 	const customStyles = {
 		headRow: {
@@ -46,7 +52,12 @@ function Clients() {
 		{
 			name: "Actions",
 			cell: (row) => (
-				<button onClick={() => deleteHandler(row.id)}>Delete</button>
+				<>
+					<Button onClick={() => deleteHandler(row.id)}>
+						Delete
+					</Button>
+					<Button onClick={() => editHandler(row.id)}>Edit</Button>
+				</>
 			),
 		},
 	];
@@ -72,6 +83,10 @@ function Clients() {
 		);
 	};
 
+	const editHandler = (id: number) => {
+		setOpenPopup(!openPopup);
+	};
+
 	const loadClients = () => {
 		sendData();
 		if (response) {
@@ -86,14 +101,25 @@ function Clients() {
 
 	return (
 		<>
-			<p>Clients</p>
-			{clients && !error && !loading && (
+			<p>{t("Clients")}</p>
+			{error}
+			{clients && !loading ? (
 				<DataTable
 					columns={columns}
 					data={clients}
 					customStyles={customStyles}
 				/>
+			) : (
+				<Loader />
 			)}
+			<Popup trigger={openPopup} setTrigger={setOpenPopup}>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit.
+					Culpa vitae ducimus assumenda similique tempore aspernatur
+					aut iure dignissimos modi, sunt id nobis architecto optio.
+					Eos excepturi porro adipisci reprehenderit quas?
+				</p>
+			</Popup>
 		</>
 	);
 }
