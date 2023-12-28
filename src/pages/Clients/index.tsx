@@ -12,7 +12,7 @@ import Form from "../../components/Form";
 
 function Clients() {
 	const { t } = useTranslation();
-	const [clients, setClients] = useState<ClientsRow[] | undefined>(undefined);
+	const [clients, setClients] = useState<ClientsRow[]>([]);
 	const [editClients, setEditClients] = useState<ClientsRow | undefined>(
 		undefined
 	);
@@ -50,7 +50,7 @@ function Clients() {
 		},
 		{
 			name: "City",
-			selector: (row) => row.address.city,
+			selector: (row) => row.address?.city || "Unknown",
 			sortable: true,
 		},
 		{
@@ -72,9 +72,9 @@ function Clients() {
 		baseURL: URL,
 	});
 
-	const deleteHandler = (id: number) => {
+	const deleteHandler = async (id: number) => {
 		//dummy delete for API
-		const deleteClient = fetch(`https://dummyjson.com/users/${id}`, {
+		await fetch(`https://dummyjson.com/users/${id}`, {
 			method: "DELETE",
 		}).then((res) => res.json());
 		// after delete on backend we needed something like
@@ -98,7 +98,7 @@ function Clients() {
 	const updateHandler = async (data: ClientsRow) => {
 		// dummy update for API
 		// updating title of post with id
-		fetch(`https://dummyjson.com/posts/${data.id}`, {
+		await fetch(`https://dummyjson.com/users/${data.id}`, {
 			// PUT or PATCH
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
@@ -109,10 +109,21 @@ function Clients() {
 		// after update on backend we needed something like
 		// loadClients();
 
-		const updatedClients = clients?.map((client) =>
-			client.id == data.id ? (client = data) : client
-		);
-		setClients(updatedClients);
+		console.log(data);
+		//if client exist
+		if (clients?.filter((client) => client.id === data.id).length) {
+			const updatedClients = clients?.map((client) =>
+				client.id == data.id ? (client = data) : client
+			);
+			setClients(updatedClients);
+		} else {
+			// or it's the new client
+			setClients([...clients, data]);
+		}
+	};
+
+	const createHandler = () => {
+		setOpenPopup(!openPopup);
 	};
 
 	const loadClients = () => {
@@ -130,6 +141,9 @@ function Clients() {
 	return (
 		<>
 			<p>{t("Clients")}</p>
+			<Button onClick={() => createHandler()}>
+				{t("Add new client")}
+			</Button>
 			{error}
 			{clients && !loading ? (
 				<DataTable

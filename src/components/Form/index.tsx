@@ -19,6 +19,7 @@ const Form = ({ onSubmit, values }: FormProps) => {
 			.required(),
 		phone: Yup.string().required(),
 		email: Yup.string().email().required(),
+		city: Yup.string(),
 	});
 
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -31,6 +32,9 @@ const Form = ({ onSubmit, values }: FormProps) => {
 					firstName: "",
 					email: "",
 					phone: "",
+					address: {
+						city: "",
+					},
 				}
 			}
 			validationSchema={FormSchema}
@@ -92,6 +96,21 @@ const Form = ({ onSubmit, values }: FormProps) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.email}
+							/>
+						</label>
+						<p>
+							{errors.email && touched.email && t("errors.email")}
+						</p>
+					</div>
+					<div>
+						<label htmlFor="city">
+							{t("fields.city")}
+							<input
+								type="city"
+								name="city"
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.address?.city}
 							/>
 						</label>
 						<p>
