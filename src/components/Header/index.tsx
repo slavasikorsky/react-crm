@@ -1,24 +1,27 @@
-import { useDispatch, useSelector } from "react-redux";
-import { darkTheme, lightTheme } from "../../data/theme";
-import { RootState } from "../../store/store";
-import { changeTheme } from "../../store/themeSlice";
 import LanguageSwitcher from "../LanguageSwitcher";
+import styled from "styled-components";
+import ThemeSwitcher from "../ThemeSwitcher";
+import logo from "../../assets/react.svg";
+
+const HeaderContaner = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	h1 {
+		width: 100%;
+	}
+`;
 
 export default function Header() {
-	const theme = useSelector((state: RootState) => state.theme.value.mode);
-	const dispatch = useDispatch();
 	return (
-		<>
-			React crm
-			<select
-				name="theme"
-				value={theme}
-				onChange={(e) => dispatch(changeTheme(e.target.value))}
-			>
-				<option value={darkTheme.mode}>{darkTheme.mode}</option>
-				<option value={lightTheme.mode}>{lightTheme.mode}</option>
-			</select>
+		<HeaderContaner>
+			<h1>
+				<img src={logo} alt="" />
+				React crm
+			</h1>
+			<ThemeSwitcher />
 			<LanguageSwitcher />
-		</>
+		</HeaderContaner>
 	);
 }
