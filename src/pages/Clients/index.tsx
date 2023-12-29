@@ -9,6 +9,13 @@ import Button from "../../components/UI/Button";
 import Popup from "../../components/Popup";
 import { useTranslation } from "react-i18next";
 import Form from "../../components/Form";
+import styled from "styled-components";
+
+const ContentWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
 
 function Clients() {
 	const { t } = useTranslation();
@@ -36,31 +43,33 @@ function Clients() {
 
 	const columns: TableColumn<ClientsRow>[] = [
 		{
-			name: "Title",
+			name: t("fields.firstName"),
 			selector: (row) => row.firstName,
 			sortable: true,
 		},
 		{
-			name: "Email",
+			name: t("fields.email"),
 			selector: (row) => row.email,
 		},
 		{
-			name: "Phone",
+			name: t("fields.phone"),
 			selector: (row) => row.phone,
 		},
 		{
-			name: "City",
+			name: t("fields.city"),
 			selector: (row) => row.address?.city || "Unknown",
 			sortable: true,
 		},
 		{
-			name: "Actions",
+			name: "",
 			cell: (row) => (
 				<>
 					<Button onClick={() => deleteHandler(row.id)}>
-						Delete
+						{t("delete")}
 					</Button>
-					<Button onClick={() => editHandler(row.id)}>Edit</Button>
+					<Button onClick={() => editHandler(row.id)}>
+						{t("update")}
+					</Button>
 				</>
 			),
 		},
@@ -109,7 +118,6 @@ function Clients() {
 		// after update on backend we needed something like
 		// loadClients();
 
-		console.log(data);
 		//if client exist
 		if (clients?.filter((client) => client.id === data.id).length) {
 			const updatedClients = clients?.map((client) =>
@@ -118,11 +126,20 @@ function Clients() {
 			setClients(updatedClients);
 		} else {
 			// or it's the new client
+			// dummy add new client for API
+			fetch("https://dummyjson.com/users/add", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ data }),
+			}).then((res) => res.json());
+			// after added on backend we needed something like
+			// loadClients();
 			setClients([...clients, data]);
 		}
 	};
 
 	const createHandler = () => {
+		setEditClients(undefined);
 		setOpenPopup(!openPopup);
 	};
 
@@ -140,10 +157,10 @@ function Clients() {
 
 	return (
 		<>
-			<p>{t("Clients")}</p>
-			<Button onClick={() => createHandler()}>
-				{t("Add new client")}
-			</Button>
+			<ContentWrapper>
+				<p>{t("Clients")}</p>
+				<Button onClick={() => createHandler()}>{t("add")}</Button>
+			</ContentWrapper>
 			{error}
 			{clients && !loading ? (
 				<DataTable
