@@ -3,13 +3,36 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ClientsRow } from "../../types/types";
+import styled from "styled-components";
+import Button from "../UI/Button";
 
 type FormProps = {
 	onSubmit: (data: ClientsRow) => Promise<void>;
 	values: ClientsRow | undefined;
 };
 
-const Form = ({ onSubmit, values }: FormProps) => {
+const Field = styled.div`
+	label {
+		cursor: pointer;
+		display: flex;
+		flex-flow: column;
+		align-items: flex-start;
+		gap: 5px;
+		margin: 12px 0 0;
+	}
+	input {
+		height: 32px;
+		padding: 0 12px;
+		border-radius: 4px;
+	}
+`;
+
+const Error = styled.span`
+	color: red;
+	font-style: italic;
+`;
+
+function Form({ onSubmit, values }: FormProps) {
 	const { t } = useTranslation();
 
 	const FormSchema = Yup.object().shape({
@@ -27,7 +50,8 @@ const Form = ({ onSubmit, values }: FormProps) => {
 		<Formik
 			initialValues={
 				values || {
-					// bad practice Math.random() but for dummy data I think it makes sense
+					// bad practice Math.random() for ID
+					// but for demp dummy data I think it makes sense
 					id: Math.floor(Math.random() * 99999),
 					firstName: "",
 					email: "",
@@ -55,7 +79,7 @@ const Form = ({ onSubmit, values }: FormProps) => {
 			}) => (
 				<form onSubmit={handleSubmit}>
 					{isSubmitting && <p>{t("send")}</p>}
-					<div>
+					<Field>
 						<label htmlFor="name">
 							{t("fields.firstName")}
 							<input
@@ -66,13 +90,13 @@ const Form = ({ onSubmit, values }: FormProps) => {
 								value={values.firstName}
 							/>
 						</label>
-						<p>
+						<Error>
 							{errors.firstName &&
 								touched.firstName &&
 								t("errors.firstName")}
-						</p>
-					</div>
-					<div>
+						</Error>
+					</Field>
+					<Field>
 						<label htmlFor="phone">
 							{t("fields.phone")}
 							<input
@@ -83,11 +107,11 @@ const Form = ({ onSubmit, values }: FormProps) => {
 								value={values.phone}
 							/>
 						</label>
-						<p>
+						<Error>
 							{errors.phone && touched.phone && t("errors.phone")}
-						</p>
-					</div>
-					<div>
+						</Error>
+					</Field>
+					<Field>
 						<label htmlFor="email">
 							{t("fields.email")}
 							<input
@@ -98,32 +122,29 @@ const Form = ({ onSubmit, values }: FormProps) => {
 								value={values.email}
 							/>
 						</label>
-						<p>
+						<Error>
 							{errors.email && touched.email && t("errors.email")}
-						</p>
-					</div>
-					<div>
-						<label htmlFor="city">
+						</Error>
+					</Field>
+					<Field>
+						<label htmlFor="address.city">
 							{t("fields.city")}
 							<input
-								type="city"
-								name="city"
+								type="address.city"
+								name="address.city"
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.address?.city}
 							/>
 						</label>
-						<p>
-							{errors.email && touched.email && t("errors.email")}
-						</p>
-					</div>
+					</Field>
 
-					<button type="submit" disabled={isSubmitting}>
+					<Button type="submit" disabled={isSubmitting}>
 						{t("submit")}
-					</button>
+					</Button>
 				</form>
 			)}
 		</Formik>
 	);
-};
+}
 export default Form;

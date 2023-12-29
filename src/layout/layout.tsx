@@ -9,6 +9,12 @@ type LayoutProps = {
 	children: JSX.Element | JSX.Element[];
 };
 
+const PageContainer = styled.div`
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 10px;
+`;
+
 const PageLayout = styled.div`
 	min-height: 80vh;
 `;
@@ -18,8 +24,10 @@ function Layout({ children }: LayoutProps) {
 	return (
 		<ThemeProvider theme={theme}>
 			<GlobalStyle />
-			<Header />
-			<PageLayout>{children || <Outlet />}</PageLayout>
+			<PageContainer>
+				<Header />
+				<PageLayout>{children || <Outlet />}</PageLayout>
+			</PageContainer>
 		</ThemeProvider>
 	);
 }

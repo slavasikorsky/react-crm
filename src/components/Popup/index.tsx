@@ -11,7 +11,7 @@ const PopupInner = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -20,7 +20,7 @@ const PopupInner = styled.div`
 `;
 
 const PopupContent = styled.div`
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);

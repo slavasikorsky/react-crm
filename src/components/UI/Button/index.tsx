@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 interface Props {
 	children: string;
+	type?: "submit" | "button";
 	onClick?: () => void;
+	disabled?: boolean;
 	rest?: JSX.Element | JSX.Element[];
 }
 
@@ -24,9 +26,14 @@ const ButtonElement = styled.button`
 
 type ButtonProps = Props;
 
-function Button({ children, onClick, ...rest }: ButtonProps) {
+function Button({ children, onClick, type, disabled, ...rest }: ButtonProps) {
 	return (
-		<ButtonElement type="button" onClick={onClick} {...rest}>
+		<ButtonElement
+			type={type || "button"}
+			onClick={onClick}
+			disabled={disabled || false}
+			{...rest}
+		>
 			{children}
 		</ButtonElement>
 	);
