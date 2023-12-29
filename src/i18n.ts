@@ -7,6 +7,7 @@ i18n.use(HttpBackend)
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
+		lng: "en",
 		fallbackLng: "en",
 		debug: false,
 		interpolation: {

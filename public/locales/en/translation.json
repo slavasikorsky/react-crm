@@ -1,20 +1,25 @@
 {
-	"enButtonLabel": "En",
-	"uaButtonLabel": "Ua",
+	"theme": "Theme:",
+	"locale": "Language:",
 	"Clients": "Clients",
 	"lorem": "Lorem ipsum dolor sit amet, autem malorum ad vim, usu ex eros nusquam, pri aliquid molestie an. Has aliquam nostrum cu. Sea modus fierent platonem id. Habeo delectus percipit ut usu, probo legimus evertitur mei cu. Putent persius signiferumque ea est.",
 	"fields": {
 		"firstName": "First Name",
 		"lastName": "Last Name",
 		"email": "Email",
-		"phone": "Phone Number"
+		"phone": "Phone Number",
+		"city": "City"
 	},
 	"errors": {
 		"firstName": "Please write name",
 		"lastName": "Please write Last Name",
 		"email": "Please enter a valid email address",
-		"phone": "Enter phone number"
+		"phone": "Enter phone number",
+		"city": "Please write your citys"
 	},
+	"add": "New",
+	"update": "Update",
+	"delete": "Delete",
 	"send": "Sended!",
 	"submit": "Submit"
 }
