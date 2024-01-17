@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
 import Button from "../UI/Button";
-
-const SelectWrapper = styled.div`
-	width: 200px;
-	text-align: right;
-`;
+import { SelectWrapper } from "./styled";
 
 function LanguageSwitcher() {
 	const { i18n, t } = useTranslation();

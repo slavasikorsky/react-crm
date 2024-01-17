@@ -3,34 +3,13 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ClientsRow } from "../../types/types";
-import styled from "styled-components";
 import Button from "../UI/Button";
+import { Field, Error } from "./styled";
 
 type FormProps = {
 	onSubmit: (data: ClientsRow) => Promise<void>;
 	values: ClientsRow | undefined;
 };
-
-const Field = styled.div`
-	label {
-		cursor: pointer;
-		display: flex;
-		flex-flow: column;
-		align-items: flex-start;
-		gap: 5px;
-		margin: 12px 0 0;
-	}
-	input {
-		height: 32px;
-		padding: 0 12px;
-		border-radius: 4px;
-	}
-`;
-
-const Error = styled.span`
-	color: red;
-	font-style: italic;
-`;
 
 function Form({ onSubmit, values }: FormProps) {
 	const { t } = useTranslation();

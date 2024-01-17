@@ -1,27 +1,18 @@
 import LanguageSwitcher from "../LanguageSwitcher";
-import styled from "styled-components";
 import ThemeSwitcher from "../ThemeSwitcher";
 import logo from "../../assets/react.svg";
-
-const HeaderContaner = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px;
-	h1 {
-		width: 100%;
-	}
-`;
+import { Container } from "../Container";
+import { Heading } from "./styled";
 
 export default function Header() {
 	return (
-		<HeaderContaner>
-			<h1>
-				<img src={logo} alt="" />
-				React crm
-			</h1>
+		<Container direction="nowrap" align="center" padding="12px 0">
+			<Heading>
+				<img src={logo} alt="logo" />
+				<h1>React crm</h1>
+			</Heading>
 			<ThemeSwitcher />
 			<LanguageSwitcher />
-		</HeaderContaner>
+		</Container>
 	);
 }

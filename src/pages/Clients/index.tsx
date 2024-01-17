@@ -25,6 +25,7 @@ function Clients() {
 	);
 	const [openPopup, setOpenPopup] = useState<boolean>(false);
 	const theme = useSelector((state: RootState) => state.theme.value);
+
 	const customStyles = {
 		headRow: {
 			style: {
