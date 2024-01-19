@@ -11,8 +11,9 @@ function ThemeSwitcher() {
 
 	return (
 		<>
-			<span>{t("theme")}</span>
+			<label htmlFor="theme">{t("theme")}</label>
 			<select
+				id="theme"
 				name="theme"
 				value={theme}
 				onChange={(e) => dispatch(changeTheme(e.target.value))}

@@ -8,7 +8,7 @@ export default function Header() {
 	return (
 		<Container direction="nowrap" align="center" padding="12px 0">
 			<Heading>
-				<img src={logo} alt="logo" />
+				<img src={logo} alt="React CRM logo" />
 				<h1>React crm</h1>
 			</Heading>
 			<ThemeSwitcher />
