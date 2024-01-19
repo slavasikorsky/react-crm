@@ -9,13 +9,8 @@ import Button from "../../components/UI/Button";
 import Popup from "../../components/Popup";
 import { useTranslation } from "react-i18next";
 import Form from "../../components/Form";
-import styled from "styled-components";
-
-const ContentWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-`;
+import emailjs from "@emailjs/browser";
+import { ButtonsWrapper, ContentWrapper } from "./styled";
 
 function Clients() {
 	const { t } = useTranslation();
@@ -23,23 +18,70 @@ function Clients() {
 	const [editClients, setEditClients] = useState<ClientsRow | undefined>(
 		undefined
 	);
+	const [selectedClients, setSelectedClients] = useState<ClientsRow[]>([]);
 	const [openPopup, setOpenPopup] = useState<boolean>(false);
 	const theme = useSelector((state: RootState) => state.theme.value);
 
 	const customStyles = {
 		headRow: {
 			style: {
+				fontSize: "16px",
 				color: theme.secondary_text_color,
 				backgroundColor: theme.secondary_bg_color,
 			},
 		},
 		rows: {
 			style: {
+				fontSize: "16px",
 				color: theme.primary_text_color,
 				backgroundColor: theme.primary_bg_color,
 				minHeight: "36px",
 			},
 		},
+		pagination: {
+			style: {
+				fontSize: "16px",
+				color: theme.secondary_text_color,
+				backgroundColor: theme.secondary_bg_color,
+			},
+			pageButtonsStyle: {
+				color: theme.secondary_text_color,
+				fill: theme.secondary_text_color,
+				backgroundColor: theme.secondary_bg_color,
+				"&:disabled": {
+					opacity: "0.4",
+					cursor: "unset",
+					fill: theme.secondary_text_color,
+					backgroundColor: theme.secondary_bg_color,
+				},
+			},
+		},
+	};
+
+	// send to email selected Clients
+	const sendHandler = async () => {
+		const serviceId = "service_501u9mo";
+		const templateId = "template_cfgfu5c";
+		try {
+			await emailjs.send(serviceId, templateId, {
+				message: selectedClientsString(selectedClients),
+			});
+			alert("Email successfully send; Check your inbox");
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const selectedClientsString = (selectedClients: ClientsRow[]) => {
+		let string = "";
+		selectedClients.map((client) => {
+			string += `${client.firstName}  ${client.phone}  ${client.email} ${client.address?.city} \n`;
+		});
+		return string;
+	};
+
+	const handleSelect = (row: { selectedRows: ClientsRow[] }) => {
+		setSelectedClients(row.selectedRows);
 	};
 
 	const columns: TableColumn<ClientsRow>[] = [
@@ -154,13 +196,21 @@ function Clients() {
 
 	useEffect(() => {
 		loadClients();
+		emailjs.init("PwB-TZ8Ror1J1yoRc");
 	}, [loading]);
 
 	return (
 		<>
 			<ContentWrapper>
 				<p>{t("Clients")}</p>
-				<Button onClick={() => createHandler()}>{t("add")}</Button>
+				<ButtonsWrapper>
+					<Button onClick={() => createHandler()}>{t("add")}</Button>
+					{selectedClients.length > 0 && (
+						<Button onClick={() => sendHandler()}>
+							{t("send to email")}
+						</Button>
+					)}
+				</ButtonsWrapper>
 			</ContentWrapper>
 			{error}
 			{clients && !loading ? (
@@ -168,6 +218,9 @@ function Clients() {
 					columns={columns}
 					data={clients}
 					customStyles={customStyles}
+					onSelectedRowsChange={handleSelect}
+					selectableRows
+					pagination
 				/>
 			) : (
 				<Loader />
